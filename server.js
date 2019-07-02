@@ -1,92 +1,3 @@
-// Dependencies
-// var express = require("express");
-// var mongoose = require("mongoose");
-// var cheerio = require("cheerio");
-// var axios = require("axios");
-// var request = require("request");
-
-// //require all models
-// var db = require("./models");
-
-// var PORT = 3000;
-
-// //initialize express
-// var app = express();
-
-// //configure middleware
-
-// //parse request body as JSON
-// app.use(express.urlencoded({ extended: true}));
-// app.use(express.json());
-// //make public a static folder
-// app.use(express.static("public"));
-
-// //connect to the mongo DB
-// mongoose.connect("mongodb://localhost/Scrape", {
-//     useNewUrlParser: true
-// });
-
-// //routes
-
-// //GET rout for scraping the onions website
-
-// app.get("/scrape", function(req, res){
-//     //first, grab the body of the html with axios
-//     axios.get("https://www.theonion.com/").then(function(response){
-//         //then, load that into cheerio and save it to $ for a shorthand selector
-//         var $ = cheerio.load(response.data);
-//         //now, grab ever h2 within an article tag, and do the following
-//         $("sc-17uq8ex-0 jYKwNu").each(function(i, element){
-//             //saveing in an empty result object
-//             // var result = {};
-
-//             //add the text and href of every link, and save them as prperties of the result object
-//             var result = result.title =$(this)
-//                 .children("js_post_item cs4lnv-0 hczWlQ")
-//                 .text();
-//             result.link = $(this)
-//                 .find("a")
-//                 .attr("href");
-
-//                 // //create a new article using the 'result' object built from scraping
-//                 // db.article.create(result)
-//                 // .then(function(dbarticle){
-//                 //     //view the added result in the console
-//                 //     console.log(dbarticle);
-//                 // })
-//                 // .catch(function(err){
-//                 //     //if an error happens, log it
-//                 //     console.log(err);
-//                 // });
-//                 console.log(result);
-
-//         });
-//         res.send("scrape complete");
-//     });
-// });
-
-// // request("https://www.theonion.com/", (error, response, html) => {
-// //     if(!error && response.statusCode == 200){
-// //         const $ = cheerio.load(html);
-        
-// //         $(".data-commerce-source").each((i, el) => {
-// //             const title = $(el)
-// //                 .find("h1")
-// //                 .text()
-// //                 .replace(/\s\s+/g, "");
-// //             const link = $(el)
-// //                 .find("a")
-// //                 .attr("href");
-
-// //                 console.log(title)
-// //         });
-
-//         // const output = wrapper.children("data-kala").text();
-        
-//         // console.log(output);
-// //     }
-// // })
-
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
@@ -118,25 +29,26 @@ app.use(express.static("public"));
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/scrape", { useNewUrlParser: true });
 
+
 // Routes
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios.get("https://www.theonion.com").then(function(response) {
+  axios.get("https://thehardtimes.net/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
     // Now, we grab every h2 within an article tag, and do the following:
-    $("article").each(function(i, element) {
+    $("article h2").each(function(i, element) {
       // Save an empty result object
-      var element = {};
+      var result = {};
 //I want to get the title and article from theonion.com
       // Add the text and href of every link, and save them as properties of the result object
-      element.title = $(this)
+      result.title = $(this)
         .children()
         .text();
-      element.link = $(this)
+      result.link = $(this)
         .children("a")
         .attr("href");
         
