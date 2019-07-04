@@ -22,6 +22,10 @@ app.engine("handlebars", exphbs({
   }));
   app.set("view engine", "handlebars");
 
+  app.get("/", function (req, res) {
+    res.render("index");
+  });
+
 // Configure middleware
 
 // Use morgan logger for logging requests
